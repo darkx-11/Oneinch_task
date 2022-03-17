@@ -1,0 +1,23 @@
+{
+  "name": "oneinch_task",
+  "version": "1.0.0",
+  "description": "\"# Oneinch_task\"\r 1inch API to support multi-swap and multi-sell for the sweep-swap feature",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darkx-11/Oneinch_task.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/darkx-11/Oneinch_task/issues"
+  },
+  "homepage": "https://github.com/darkx-11/Oneinch_task#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
