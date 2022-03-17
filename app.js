@@ -3,7 +3,7 @@ const app = express();
 //const router = express.Router();
 //import * as Controller from "./controller/oneInch.js";
 
-const oneinchRouter = require("./controller/router");
+const oneinchRouter = require("./routes/router");
 app.use("/", oneinchRouter);
 
 //router.get("/", Controller.test);
