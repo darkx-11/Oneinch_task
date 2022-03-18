@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/darkx-11/Oneinch_task#readme",
   "dependencies": {
-    "express": "^4.17.3"
+    "axios": "^0.26.1",
+    "express": "^4.17.3",
+    "node-fetch": "^2.6.7"
   }
 }

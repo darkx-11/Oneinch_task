@@ -1,9 +1,10 @@
 const { range } = require("express/lib/request");
+const ExecuteQuote = require("../resolver/oneInchmulti");
 
 async function oneInchV4multiswap(req, res) {
   try {
-    const buyToken = req.query.buyToken;
-    const sellToken = req.query.sellToken;
+    const buyToken = req.query.buyToken; //To token addr
+    const sellToken = req.query.sellToken; //From token addr
     const sellAmount = req.query.sellAmount;
     const dsaAddr = req.query.dsaAddress;
     //const asdas = req.querasdasy.asdadas;
@@ -102,6 +103,12 @@ async function oneInchV4multiquote(req, res) {
       var _sellAmount = sellAmount[i];
       console.log("Index", i, "Values", _buyToken, _sellToken, _sellAmount);
       //Single Quote Logic
+      var quoteParams = {
+        fromTokenAddress: _sellToken, // 1INCH
+        toTokenAddress: _buyToken, // DAI
+        amount: _sellAmount,
+      };
+      ExecuteQuote(quoteParams);
     }
 
     res.send("Quote Successfull!!");
