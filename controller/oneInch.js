@@ -1,6 +1,6 @@
 const { range } = require("express/lib/request");
 
-async function oneInchV4Swap(req, res) {
+async function oneInchV4multiswap(req, res) {
   try {
     const buyToken = req.query.buyToken;
     const sellToken = req.query.sellToken;
@@ -64,18 +64,52 @@ async function oneInchV4Swap(req, res) {
   }
 }
 
-async function oneInchV4quote(req, res) {
+async function oneInchV4multiquote(req, res) {
   try {
-    const buy = req.query.buyToken;
-    console.log("HERE is HOME QUOTE!");
-    console.log(buy);
-    console.log("Length-", buy.length);
-    res.send("This is QUOTE " + buy);
+    const buyToken = req.query.buyToken;
+    const sellToken = req.query.sellToken;
+    const sellAmount = req.query.sellAmount;
+    if (!buyToken)
+      return res.status(400).json({ error: "buyToken-query-missing" });
+    if (!sellToken)
+      return res.status(400).json({ error: "sellToken-query-missing" });
+    if (!sellAmount)
+      return res.status(400).json({ error: "sellAmount-query-missing" });
+    if (sellAmount <= 0)
+      return res.status(400).json({ error: "sellAmount-invaild" });
+    if (
+      buyToken.length != sellToken.length ||
+      buyToken.length != sellAmount.length
+    ) {
+      return res.status(400).json({ error: "Array lengths do not match" });
+    }
+    // const maxSlippage = req.query.maxSlippage
+    // const fee = req.query.fee
+
+    // const { code, data } = await getOneInchQuote({
+    //   buyToken,
+    //   sellToken,
+    //   sellAmount,
+    //   maxSlippage,
+    //   fee,
+    // });
+
+    //return res.status(code).json(data);
+
+    for (var i = 0; i < buyToken.length; i++) {
+      var _buyToken = buyToken[i];
+      var _sellToken = sellToken[i];
+      var _sellAmount = sellAmount[i];
+      console.log("Index", i, "Values", _buyToken, _sellToken, _sellAmount);
+      //Single Quote Logic
+    }
+
+    res.send("Quote Successfull!!");
   } catch (error) {
     return res.status(400).send({ error });
   }
 }
 module.exports = {
-  oneInchv4Swap: oneInchV4Swap,
-  oneInchV4quote: oneInchV4quote,
+  oneInchv4multiswap: oneInchV4multiswap,
+  oneInchV4multiquote: oneInchV4multiquote,
 };

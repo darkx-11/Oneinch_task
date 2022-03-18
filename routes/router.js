@@ -6,7 +6,7 @@ const ResolversController = require("../controller/oneInch");
 //import { oneInchV4Swap } from "../controller/oneInch.js";
 
 console.log("RESOLVER", ResolversController);
-router.get("/oneinchswap", ResolversController.oneInchv4Swap);
-router.get("/oneinchquote", ResolversController.oneInchV4quote);
+router.get("/oneinchmultiswap", ResolversController.oneInchv4multiswap);
+router.get("/oneinchmultiquote", ResolversController.oneInchV4multiquote);
 
 module.exports = router;
