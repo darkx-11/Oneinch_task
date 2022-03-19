@@ -1,6 +1,6 @@
-const express = require("express");
+import express from "express";
 const app = express();
-const oneinchRouter = require("./routes/router");
+import { oneinchRouter } from "./routes/router.js";
 app.use("/", oneinchRouter);
 
 app

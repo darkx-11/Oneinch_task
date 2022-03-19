@@ -1,7 +1,5 @@
-const { range } = require("express/lib/request");
-const ExecuteQuote = require("../resolver/oneInchmulti");
-
-async function oneInchV4multiswap(req, res) {
+import { ExecuteQuote } from "../resolver/oneInchmulti.js";
+export async function oneInchV4multiswap(req, res) {
   try {
     const buyToken = req.query.buyToken; //To token addr
     const sellToken = req.query.sellToken; //From token addr
@@ -25,32 +23,14 @@ async function oneInchV4multiswap(req, res) {
     ) {
       return res.status(400).json({ error: "Array lengths do not match" });
     }
-
-    for (var i = 0; i < buyToken.length; i++) {
-      var _buyToken = buyToken[i];
-      var _sellToken = sellToken[i];
-      var _sellAmount = sellAmount[i];
-      var _dsaAddr = dsaAddr[i];
-      console.log(
-        "Index",
-        i,
-        "Values",
-        _buyToken,
-        _sellToken,
-        _sellAmount,
-        _dsaAddr
-      );
-      //Logic of single swap
-    }
-
+    //Call Resolver for swap loop here
     res.send("Swap Successfull!!");
-    // return res.status(200).json({ result: "Swap Successfull" });
   } catch (err) {
     return res.status(400).send({ error: err });
   }
 }
 
-async function oneInchV4multiquote(req, res) {
+export async function oneInchV4multiquote(req, res) {
   try {
     const buyToken = req.query.buyToken;
     const sellToken = req.query.sellToken;
@@ -70,26 +50,15 @@ async function oneInchV4multiquote(req, res) {
       return res.status(400).json({ error: "Array lengths do not match" });
     }
 
-    for (var i = 0; i < buyToken.length; i++) {
-      var _buyToken = buyToken[i];
-      var _sellToken = sellToken[i];
-      var _sellAmount = sellAmount[i];
-      console.log("Index", i, "Values", _buyToken, _sellToken, _sellAmount);
-      //Single Quote Logic
-      var quoteParams = {
-        fromTokenAddress: _sellToken, // 1INCH
-        toTokenAddress: _buyToken, // DAI
-        amount: _sellAmount,
-      };
-      ExecuteQuote(quoteParams);
-    }
+    var quoteParams = {
+      fromTokenAddressArray: sellToken,
+      toTokenAddressArray: buyToken,
+      amountArray: sellAmount,
+    };
+    ExecuteQuote(quoteParams);
 
     res.send("Quote Successfull!!");
   } catch (error) {
     return res.status(400).send({ error });
   }
 }
-module.exports = {
-  oneInchv4multiswap: oneInchV4multiswap,
-  oneInchV4multiquote: oneInchV4multiquote,
-};

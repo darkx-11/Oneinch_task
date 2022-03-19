@@ -1,8 +1,10 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const ResolversController = require("../controller/oneInch");
+import {
+  oneInchV4multiswap,
+  oneInchV4multiquote,
+} from "../controller/oneInch.js";
 
-router.get("/oneinchmultiswap", ResolversController.oneInchv4multiswap);
-router.get("/oneinchmultiquote", ResolversController.oneInchV4multiquote);
-
-module.exports = router;
+router.get("/oneinchmultiswap", oneInchV4multiswap);
+router.get("/oneinchmultiquote", oneInchV4multiquote);
+export { router as oneinchRouter };

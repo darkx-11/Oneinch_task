@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "\"# Oneinch_task\"\r 1inch API to support multi-swap and multi-sell for the sweep-swap feature",
   "main": "index.js",
+  "type":"module",
   "scripts": {
     "start": "nodemon app.js"
   },
