@@ -1,20 +1,16 @@
 import axios from "axios";
 export async function ExecuteQuote(quoteParams) {
-  for (var i = 0; i < quoteParams.fromTokenAddressArray.length; i++) {
-    var singlequoteParams = {
+  for (let i = 0; i < quoteParams.fromTokenAddressArray.length; i++) {
+    let singlequoteParams = {
       fromTokenAddress: quoteParams.fromTokenAddressArray[i],
       toTokenAddress: quoteParams.toTokenAddressArray[i],
       amount: quoteParams.amountArray[i],
     };
     const chainId = 56; //For Binance smart chain
     const apiBaseUrl = "https://api.1inch.io/v4.0/" + chainId;
-    const url =
-      apiBaseUrl +
-      "/quote" +
-      "?" +
-      new URLSearchParams(singlequoteParams).toString();
+    const url = apiBaseUrl + "/quote";
     await axios
-      .get(url)
+      .get(url, { params: singlequoteParams })
       .then(async function (response) {
         console.log(response.data);
         return await response.data;

@@ -1,10 +1,7 @@
 import { ExecuteQuote } from "../resolver/oneInchmulti.js";
 export async function oneInchV4multiswap(req, res) {
   try {
-    const buyToken = req.query.buyToken; //To token addr
-    const sellToken = req.query.sellToken; //From token addr
-    const sellAmount = req.query.sellAmount;
-    const dsaAddr = req.query.dsaAddress;
+    const { buyToken, sellToken, sellAmount, dsaAddress } = req.query;
     if (!buyToken)
       return res.status(400).json({ error: "buyToken-query-missing" });
     if (!sellToken)
@@ -13,13 +10,13 @@ export async function oneInchV4multiswap(req, res) {
       return res.status(400).json({ error: "sellAmount-query-missing" });
     if (sellAmount <= 0)
       return res.status(400).json({ error: "sellAmount-invaild" });
-    if (!dsaAddr)
+    if (!dsaAddress)
       return res.status(400).json({ error: "dsaAddress-query-missing" });
 
     if (
       buyToken.length != sellToken.length ||
       buyToken.length != sellAmount.length ||
-      buyToken.length != dsaAddr.length
+      buyToken.length != dsaAddress.length
     ) {
       return res.status(400).json({ error: "Array lengths do not match" });
     }
@@ -32,9 +29,8 @@ export async function oneInchV4multiswap(req, res) {
 
 export async function oneInchV4multiquote(req, res) {
   try {
-    const buyToken = req.query.buyToken;
-    const sellToken = req.query.sellToken;
-    const sellAmount = req.query.sellAmount;
+    const { buyToken, sellToken, sellAmount } = req.query;
+    console.log(buyToken, sellToken, sellAmount);
     if (!buyToken)
       return res.status(400).json({ error: "buyToken-query-missing" });
     if (!sellToken)
@@ -50,7 +46,7 @@ export async function oneInchV4multiquote(req, res) {
       return res.status(400).json({ error: "Array lengths do not match" });
     }
 
-    var quoteParams = {
+    let quoteParams = {
       fromTokenAddressArray: sellToken,
       toTokenAddressArray: buyToken,
       amountArray: sellAmount,
