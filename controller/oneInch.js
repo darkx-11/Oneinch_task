@@ -1,22 +1,28 @@
 import { ExecuteQuote } from "../resolver/oneInchmulti.js";
 export async function oneInchV4multiswap(req, res) {
   try {
-    const { buyToken, sellToken, sellAmount, dsaAddress } = req.query;
+    const { buyToken, sellToken, sellAmount, dsaAddress, chainName } =
+      req.query;
     if (!buyToken)
       return res.status(400).json({ error: "buyToken-query-missing" });
     if (!sellToken)
       return res.status(400).json({ error: "sellToken-query-missing" });
     if (!sellAmount)
       return res.status(400).json({ error: "sellAmount-query-missing" });
-    if (sellAmount <= 0)
-      return res.status(400).json({ error: "sellAmount-invaild" });
+    if (!chainName)
+      return res.status(400).json({ error: "chainName-query-missing" });
     if (!dsaAddress)
       return res.status(400).json({ error: "dsaAddress-query-missing" });
-
+    let sellAmountArray = sellAmount.split(",");
+    for (let i = 0; i < sellAmountArray.length; i++) {
+      if (sellAmountArray[i] <= 0)
+        return res.status(400).json({ error: "sellAmount-invaild" });
+    }
     if (
-      buyToken.length != sellToken.length ||
-      buyToken.length != sellAmount.length ||
-      buyToken.length != dsaAddress.length
+      buyToken.split(",").length != sellToken.split(",").length ||
+      buyToken.split(",").length != sellAmount.split(",").length ||
+      buyToken.split(",").length != dsaAddress.split(",").length ||
+      buyToken.split(",").length != chainName.split(",").length
     ) {
       return res.status(400).json({ error: "Array lengths do not match" });
     }
@@ -29,32 +35,34 @@ export async function oneInchV4multiswap(req, res) {
 
 export async function oneInchV4multiquote(req, res) {
   try {
-    const { buyToken, sellToken, sellAmount } = req.query;
-    console.log(buyToken, sellToken, sellAmount);
+    const { buyToken, sellToken, sellAmount, chainName } = req.query;
+
     if (!buyToken)
       return res.status(400).json({ error: "buyToken-query-missing" });
     if (!sellToken)
       return res.status(400).json({ error: "sellToken-query-missing" });
     if (!sellAmount)
       return res.status(400).json({ error: "sellAmount-query-missing" });
-    if (sellAmount <= 0)
-      return res.status(400).json({ error: "sellAmount-invaild" });
+    if (!chainName)
+      return res.status(400).json({ error: "chainName-query-missing" });
+
+    let sellAmountArray = sellAmount.split(",");
+    for (let i = 0; i < sellAmountArray.length; i++) {
+      if (sellAmountArray[i] <= 0)
+        return res.status(400).json({ error: "sellAmount-invaild" });
+    }
     if (
-      buyToken.length != sellToken.length ||
-      buyToken.length != sellAmount.length
+      buyToken.split(",").length != sellToken.split(",").length ||
+      buyToken.split(",").length != sellAmount.split(",").length ||
+      buyToken.split(",").length != chainName.split(",").length
     ) {
       return res.status(400).json({ error: "Array lengths do not match" });
     }
-
-    let quoteParams = {
-      fromTokenAddressArray: sellToken,
-      toTokenAddressArray: buyToken,
-      amountArray: sellAmount,
-    };
-    ExecuteQuote(quoteParams);
+    ExecuteQuote(buyToken, sellToken, sellAmount, chainName);
 
     res.send("Quote Successfull!!");
   } catch (error) {
+    console.log(error);
     return res.status(400).send({ error });
   }
 }
