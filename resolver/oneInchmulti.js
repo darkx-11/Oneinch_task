@@ -15,6 +15,46 @@ const ChainMap = {
   Polygon: 137,
   polygon: 137,
 };
+export async function ExecuteSwap(
+  _buyToken,
+  _sellToken,
+  _sellAmount,
+  _dsaAddress,
+  _chainName,
+  _slippage
+) {
+  let buyTokenArray = _buyToken.split(",");
+  let sellTokenArray = _sellToken.split(",");
+  let sellAmountArray = _sellAmount.split(",");
+  let dsaAddressArray = _dsaAddress.split(",");
+  let chainNameArray = _chainName.split(",");
+  let slippageArray = _slippage.split(",");
+  for (let i = 0; i < buyTokenArray.length; i++) {
+    let singleswapParams = {
+      fromTokenAddress: sellTokenArray[i],
+      toTokenAddress: buyTokenArray[i],
+      amount: sellAmountArray[i],
+      fromAddress: dsaAddressArray[i],
+      slippage: slippageArray[i],
+    };
+    const chainId = ChainMap[chainNameArray[i]]; //Selecting Chain Id from Mapping based on chain Name
+    console.log(chainId);
+    const apiBaseUrl = "https://api.1inch.io/v4.0/" + chainId;
+    const url = apiBaseUrl + "/swap";
+
+    await axios
+      .get(url, { params: singleswapParams })
+      .then(async function (response) {
+        console.log(response.data);
+        return await response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+        return error;
+      });
+  }
+}
+
 export async function ExecuteQuote(
   _buyToken,
   _sellToken,
@@ -24,14 +64,14 @@ export async function ExecuteQuote(
   let buyTokenArray = _buyToken.split(",");
   let sellTokenArray = _sellToken.split(",");
   let sellAmountArray = _sellAmount.split(",");
-  let _chainNameArray = _chainName.split(",");
+  let chainNameArray = _chainName.split(",");
   for (let i = 0; i < buyTokenArray.length; i++) {
     let singlequoteParams = {
       fromTokenAddress: sellTokenArray[i],
       toTokenAddress: buyTokenArray[i],
       amount: sellAmountArray[i],
     };
-    const chainId = ChainMap[_chainNameArray[i]]; //For Binance smart chain
+    const chainId = ChainMap[chainNameArray[i]]; //Selecting Chain Id from Mapping based on chain Name
     console.log(chainId);
     const apiBaseUrl = "https://api.1inch.io/v4.0/" + chainId;
     const url = apiBaseUrl + "/quote";

@@ -1,7 +1,7 @@
-import { ExecuteQuote } from "../resolver/oneInchmulti.js";
+import { ExecuteQuote, ExecuteSwap } from "../resolver/oneInchmulti.js";
 export async function oneInchV4multiswap(req, res) {
   try {
-    const { buyToken, sellToken, sellAmount, dsaAddress, chainName } =
+    const { buyToken, sellToken, sellAmount, dsaAddress, chainName, slippage } =
       req.query;
     if (!buyToken)
       return res.status(400).json({ error: "buyToken-query-missing" });
@@ -13,6 +13,9 @@ export async function oneInchV4multiswap(req, res) {
       return res.status(400).json({ error: "chainName-query-missing" });
     if (!dsaAddress)
       return res.status(400).json({ error: "dsaAddress-query-missing" });
+    if (!slippage)
+      return res.status(400).json({ error: "Slippage-query-missing" });
+
     let sellAmountArray = sellAmount.split(",");
     for (let i = 0; i < sellAmountArray.length; i++) {
       if (sellAmountArray[i] <= 0)
@@ -22,11 +25,19 @@ export async function oneInchV4multiswap(req, res) {
       buyToken.split(",").length != sellToken.split(",").length ||
       buyToken.split(",").length != sellAmount.split(",").length ||
       buyToken.split(",").length != dsaAddress.split(",").length ||
-      buyToken.split(",").length != chainName.split(",").length
+      buyToken.split(",").length != chainName.split(",").length ||
+      buyToken.split(",").length != slippage.split(",").length
     ) {
       return res.status(400).json({ error: "Array lengths do not match" });
     }
-    //Call Resolver for swap loop here
+    ExecuteSwap(
+      buyToken,
+      sellToken,
+      sellAmount,
+      dsaAddress,
+      chainName,
+      slippage
+    );
     res.send("Swap Successfull!!");
   } catch (err) {
     return res.status(400).send({ error: err });
